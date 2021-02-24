@@ -100,7 +100,7 @@ Error VariantParser::get_token(Stream *p_stream, Token &r_token, int &line, Stri
             p_stream->saved = 0;
         } else {
             cchar = p_stream->get_char();
-            if (p_stream->is_eof()) {
+            if (cchar == 0) {
                 r_token.type = TK_EOF;
                 return OK;
             }
@@ -156,7 +156,7 @@ Error VariantParser::get_token(Stream *p_stream, Token &r_token, int &line, Stri
 
             while (true) {
                 CharType ch = p_stream->get_char();
-                if (p_stream->is_eof()) {
+                if (ch == 0) {
                     r_token.type = TK_EOF;
                     return OK;
                 }
@@ -187,7 +187,7 @@ Error VariantParser::get_token(Stream *p_stream, Token &r_token, int &line, Stri
             color_str += '#';
             while (true) {
                 CharType ch = p_stream->get_char();
-                if (p_stream->is_eof()) {
+                if (ch == 0) {
                     r_token.type = TK_EOF;
                     return OK;
                 } else if ((ch >= '0' && ch <= '9') || (ch >= 'a' && ch <= 'f') || (ch >= 'A' && ch <= 'F')) {
@@ -426,7 +426,7 @@ Error VariantParser::_parse_enginecfg(Stream *p_stream, Vector<String> &strings,
 
         CharType c = p_stream->get_char();
 
-        if (p_stream->is_eof()) {
+        if (c == 0) {
             r_err_str = "Unexpected EOF while parsing old-style project.godot construct";
             return ERR_PARSE_ERROR;
         }
@@ -602,19 +602,20 @@ Error VariantParser::parse_value(Token &token, Variant &value, Stream *p_stream,
             value = Math_INF;
             break; case d_nan:
             value = Math_NAN;
-            break; case d_Vector2: {
-                       Vector<float> args;
-                       Error err = _parse_construct<float>(p_stream, args, line, r_err_str);
-                       if (err)
-                           return err;
+            break;
+        case d_Vector2: {
+            Vector<float> args;
+            Error err = _parse_construct<float>(p_stream, args, line, r_err_str);
+            if (err)
+                return err;
 
-                       if (args.size() != 2) {
-                           r_err_str = "Expected 2 arguments for constructor";
-                           return ERR_PARSE_ERROR;
-                       }
+            if (args.size() != 2) {
+                r_err_str = "Expected 2 arguments for constructor";
+                return ERR_PARSE_ERROR;
+            }
 
-                       value = Vector2(args[0], args[1]);
-                   } break;
+            value = Vector2(args[0], args[1]);
+        } break;
         case d_Rect2: {
 
             Vector<float> args;

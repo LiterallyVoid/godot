@@ -50,6 +50,10 @@ class FileAccessUnix : public FileAccess {
 	String path;
 	String path_src;
 
+    uint8_t *buffer;
+    size_t len;
+    mutable size_t pos;
+
 	static FileAccess *create_libc();
 
 public:
