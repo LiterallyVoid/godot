@@ -53,12 +53,15 @@ public:
 	struct StreamFile : public Stream {
 
 		FileAccess *f;
+            String s;
+            int p;
+            bool has_s;
 
 		virtual CharType get_char();
 		virtual bool is_utf8() const;
 		virtual bool is_eof() const;
 
-		StreamFile() { f = NULL; }
+            StreamFile() { f = NULL; has_s = false; }
 	};
 
 	struct StreamString : public Stream {

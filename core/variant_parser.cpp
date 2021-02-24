@@ -37,7 +37,12 @@
 
 CharType VariantParser::StreamFile::get_char() {
 
-	return f->get_8();
+    if (!has_s) {
+        has_s = true;
+        s = f->get_as_utf8_string();
+        p = 0;
+    }
+    return s[p++];
 }
 
 bool VariantParser::StreamFile::is_utf8() const {
