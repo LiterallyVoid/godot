@@ -3263,9 +3263,10 @@ String String::rstrip(const String &p_chars) const {
 
 	return substr(0, end + 1);
 }
-
 String String::simplify_path() const {
+    return *this;
 
+    String start = *this;
 	String s = *this;
 	String drive;
 	if (s.begins_with("local://")) {
@@ -3332,7 +3333,10 @@ String String::simplify_path() const {
 			s += "/";
 		s += dirs[i];
 	}
-
+        String end = drive + s;
+        if (start != end) {
+            print_line("ERROR: " + start + " != " + end);
+        }
 	return drive + s;
 }
 

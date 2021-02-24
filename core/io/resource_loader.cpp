@@ -287,7 +287,7 @@ RES ResourceLoader::_load(const String &p_path, const String &p_original_path, c
 }
 
 bool ResourceLoader::_add_to_loading_map(const String &p_path) {
-
+    return true;
 	bool success;
 	loading_map_mutex.lock();
 
@@ -308,6 +308,7 @@ bool ResourceLoader::_add_to_loading_map(const String &p_path) {
 }
 
 void ResourceLoader::_remove_from_loading_map(const String &p_path) {
+    return;
 	loading_map_mutex.lock();
 
 	LoadingMapKey key;
